@@ -1,16 +1,17 @@
 import pybullet as p
+import constants as c
 import numpy
 import random
 import pybullet_data
 import pyrosim.pyrosim as pyrosim
 import time
 
-backLegAmplitude = numpy.pi/4
-backLegFrequency = 4
-backLegPhaseOffset = 0
-frontLegAmplitude = numpy.pi/2
-frontLegFrequency = 12
-frontLegPhaseOffset = numpy.pi/4
+backLegAmplitude = c.backLegAmplitude
+backLegFrequency = c.backLegFrequency
+backLegPhaseOffset = c.backLegPhaseOffset
+frontLegAmplitude = c.frontLegAmplitude
+frontLegFrequency = c.frontLegFrequency
+frontLegPhaseOffset = c.frontLegPhaseOffset
 
 physicsClient = p.connect(p.GUI)
 p.setAdditionalSearchPath(pybullet_data.getDataPath())
@@ -26,7 +27,6 @@ frontLegSensorValues = numpy.zeros(1000)
 array = numpy.linspace(0, 360, 1000)
 backArrayValues = backLegAmplitude * numpy.sin(backLegFrequency * array + backLegPhaseOffset)
 frontArrayValues = frontLegAmplitude * numpy.sin(frontLegFrequency * array + frontLegPhaseOffset)
-#numpy.save('data/arrayrValues.npy', arrayValues)
 
 
 for x in range(1000):
@@ -43,7 +43,7 @@ controlMode = p.POSITION_CONTROL,
 
 targetPosition = backArrayValues[x],
 
-maxForce = 100)
+maxForce = c.maxForce)
     pyrosim.Set_Motor_For_Joint(
 
 bodyIndex = robotId,
@@ -54,7 +54,7 @@ controlMode = p.POSITION_CONTROL,
 
 targetPosition = frontArrayValues[x],
 
-maxForce = 100)
+maxForce = c.maxForce)
     time.sleep(1/240)
 numpy.save('data/backLegSensorValues.npy', backLegSensorValues)
 numpy.save('data/frontLegSensorValues.npy', frontLegSensorValues)
