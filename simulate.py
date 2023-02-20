@@ -5,6 +5,13 @@ import pybullet_data
 import pyrosim.pyrosim as pyrosim
 import time
 
+backLegAmplitude = numpy.pi/4
+backLegFrequency = 4
+backLegPhaseOffset = 0
+frontLegAmplitude = numpy.pi/2
+frontLegFrequency = 12
+frontLegPhaseOffset = numpy.pi/4
+
 physicsClient = p.connect(p.GUI)
 p.setAdditionalSearchPath(pybullet_data.getDataPath())
 p.setGravity(0,0,-9.8)
@@ -15,6 +22,11 @@ p.loadSDF("world.sdf")
 pyrosim.Prepare_To_Simulate(robotId)
 backLegSensorValues = numpy.zeros(1000)
 frontLegSensorValues = numpy.zeros(1000)
+
+array = numpy.linspace(0, 360, 1000)
+backArrayValues = backLegAmplitude * numpy.sin(backLegFrequency * array + backLegPhaseOffset)
+frontArrayValues = frontLegAmplitude * numpy.sin(frontLegFrequency * array + frontLegPhaseOffset)
+#numpy.save('data/arrayrValues.npy', arrayValues)
 
 
 for x in range(1000):
@@ -29,9 +41,9 @@ jointName = "Torso_Backleg",
 
 controlMode = p.POSITION_CONTROL,
 
-targetPosition = -numpy.pi/4.0,
+targetPosition = backArrayValues[x],
 
-maxForce = 500)
+maxForce = 100)
     pyrosim.Set_Motor_For_Joint(
 
 bodyIndex = robotId,
@@ -40,10 +52,10 @@ jointName = "Torso_Frontleg",
 
 controlMode = p.POSITION_CONTROL,
 
-targetPosition = numpy.pi/4.0,
+targetPosition = frontArrayValues[x],
 
-maxForce = 500)
-    time.sleep(1/60)
+maxForce = 100)
+    time.sleep(1/240)
 numpy.save('data/backLegSensorValues.npy', backLegSensorValues)
 numpy.save('data/frontLegSensorValues.npy', frontLegSensorValues)
 p.disconnect()
