@@ -25,6 +25,8 @@ class SIMULATION:
             
             self.robot.Sense(x)
             
+            self.robot.Think()
+            
             self.robot.Act(x)
         
             time.sleep(1/240)
