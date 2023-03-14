@@ -9,8 +9,13 @@ from robot import ROBOT
 
 class SIMULATION:
 
-    def __init__(self):
-        self.physicsClient = p.connect(p.GUI)
+    def __init__(self, directOrGui):
+        
+        if directOrGui == "DIRECT":
+            self.physicsClient = p.connect(p.DIRECT)
+        elif directOrGui == "GUI":
+            self.physicsClient = p.connect(p.GUI)
+        
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
         p.setGravity(0,0,-9.8)
         self.world = WORLD()
@@ -30,6 +35,9 @@ class SIMULATION:
             self.robot.Act(x)
         
             time.sleep(1/240)
+    
+    def Get_Fitness(self):
+        self.robot.Get_Fitness()
             
     def __del__(self):
 
