@@ -9,3 +9,4 @@ frontLegFrequency = 12
 frontLegPhaseOffset = numpy.pi/4
 maxForce = 50
 numberOfGenerations = 10
+populationSize = 10
